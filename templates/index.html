@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h1>📝 Task Manager</h1>
+<div>
+    <a href="/?filter=all"
+       {% if current_filter == 'all' %}style="font-weight:bold"{% endif %}>
+       All
+    </a> |
+    <a href="/?filter=completed"
+       {% if current_filter == 'completed' %}style="font-weight:bold"{% endif %}>
+       Completed
+    </a> |
+    <a href="/?filter=pending"
+       {% if current_filter == 'pending' %}style="font-weight:bold"{% endif %}>
+       Pending
+    </a>
+</div>
+
+
+<hr>
+
+<form method="POST">
+    <input type="text" name="task" placeholder="Enter a task" required>
+    <button type="submit">Add Task</button>
+</form>
+
+<hr>
+
+<ul>
+    {% for task in tasks %}
+        <li>
+            {% if task.completed == 1 %}
+                <s>{{ task.name }}</s> ✅
+            {% else %}
+                {{ task.name }}
+            {% endif %}
+
+            <a href="{{ url_for('complete_task', task_id=task.id) }}">[Complete]</a>
+            <a href="{{ url_for('delete_task', task_id=task.id) }}">[Delete]</a>
+        </li>
+    {% else %}
+        <li>No tasks yet</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
